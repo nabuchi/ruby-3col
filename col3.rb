@@ -4,21 +4,22 @@ require 'digest/sha1'
 
 #12bitを想定
 class Collision3
-=begin
     @@bit = 16
     @@pow2_N = 4096
     @@pow2_23N = 256
     @@pow2_13N = 16
-=end
 
+=begin
     @@bit = 32
     @@pow2_N = 4294967296
     @@pow2_23N = 2654484
     @@pow2_13N = 1629
+=end
 
     @@N_A = @@pow2_13N
     @@N_R = @@pow2_13N
     @@N_B = @@pow2_23N + 10000
+    @@startarr = 40-@@bit/4+1
 
     def initialize()
         @fortable2 = {}
@@ -27,9 +28,9 @@ class Collision3
     end
     attr_accessor :shacount
 private
-    def sha32b(str)
-        @shacount += 1
-        return Digest::SHA1.hexdigest(str)[40-@@bit/4+1..40].hex
+    def sha32b(str, flag = true)
+        @shacount += 1 if flag
+        return Digest::SHA1.hexdigest(str)[@@startarr..40].hex
     end
 
 public
@@ -48,10 +49,10 @@ public
     #2コリジョンテーブルの作成
     def maketable2
         while @table2.size < @@N_A
-            rand = rand(4096) 
+            rand = rand(@@pow2_N) 
             s1 = g1 = rand
             @@N_R.times do |i|
-                g1 = sha32b("#{g1}")#とりあえずs1を一個進める
+                g1 = sha32b("#{g1}",true)#とりあえずs1を一個進める
                 s2 = @fortable2[g1]#tableに発見すればスタートをs2とする
                 if s2
                     #s2とs1を同じ位置にセットする
@@ -86,7 +87,7 @@ public
             arr2 = @table2[g]
             if arr2
                 if arr2[0] != s && arr2[1] != s
-                    puts "=ssss=",arr2[0],arr2[1],s,sha32b("#{arr2[0]}"),sha32b("#{arr2[1]}"),sha32b("#{s}"),"=gggg="
+                    #puts "=ssss=",arr2[0],arr2[1],s,sha32b("#{arr2[0]}"),sha32b("#{arr2[1]}"),sha32b("#{s}"),"=gggg="
                     #puts "shacountは", @shacount
                     return 0
                 end
@@ -96,18 +97,17 @@ public
     end
 end
 
+10000.times do |p|
 col3 = Collision3.new
 sc = []
-sc[0] = col3.shacount
-puts sc[0]
 col3.makefortable2
 sc[1] =  col3.shacount
-puts sc[1] - sc[0]
+puts sc[1] - 0
 col3.maketable2
 sc[2] = col3.shacount
 puts sc[2] - sc[1]
 col3.search3col
 sc[3] = col3.shacount
 puts sc[3] - sc[2]
-puts
 puts col3.shacount
+end
