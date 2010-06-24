@@ -4,7 +4,7 @@ require 'digest/sha1'
 
 #12bitを想定
 class Collision3
-    @@bit = 16
+    @@bit = 12
     @@pow2_N = 4096
     @@pow2_23N = 256
     @@pow2_13N = 16
@@ -44,6 +44,17 @@ public
             end
             @fortable2[goal] = start
         end
+    end
+    #ランダムマップを用いてN_AxN_Rのテーブルを作成
+    class Anchor
+        def initialize()
+            @next = nil#次のAnchor
+            @data = 0#値
+            @dist = 0#距離
+        end
+    end
+    def rmaptable
+          
     end
 
     #2コリジョンテーブルの作成
