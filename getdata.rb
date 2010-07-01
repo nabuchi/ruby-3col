@@ -1,11 +1,14 @@
-#!/usr/bin/ruby1.9 -Ku
+#!/usr/bin/ruby -Ku
+
+fname = ARGV.shift
+fn = fname.sub(/\.\w+$/,'')
 
 lines = 0
-step1 = File.open("step1.dat","w")
-step2 = File.open("step2.dat","w")
-step3 = File.open("step3.dat","w")
-all = File.open("all.dat","w")
-open("data_all.dat") {|file|
+step1 = File.open("#{fn}-s1.dat","w")
+step2 = File.open("#{fn}-s2.dat","w")
+step3 = File.open("#{fn}-s3.dat","w")
+all = File.open("#{fn}-all.dat","w")
+open(fname) {|file|
     while l = file.gets
         lines += 1
         if lines%4 == 1

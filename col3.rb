@@ -1,4 +1,4 @@
-#!/usr/bin/ruby1.9 -Ku
+#!/usr/bin/ruby -Ku
 
 require 'digest/sha1'
 
@@ -9,21 +9,23 @@ class Collision3
     @@pow2_N = 4096
     @@pow2_23N = 256
     @@pow2_13N = 16
-=begin 
+=begin
     @@bit = 16
     @@pow2_N = 65536
-    @@pow2_23N = 1629
+    @@pow2_23N = 1625
     @@pow2_13N = 40
+=end
 
+=begin
     @@bit = 20
-    @@pow2_N =
-    @@pow2_23N =
-    @@pow2_13N = 
+    @@pow2_N = 1048576
+    @@pow2_23N = 10321
+    @@pow2_13N = 102
 
     @@bit = 32
     @@pow2_N = 4294967296
-    @@pow2_23N = 2654484
-    @@pow2_13N = 1629
+    @@pow2_23N = 2642246
+    @@pow2_13N = 1625
 =end
 
     @@N_A = @@pow2_13N
@@ -89,18 +91,18 @@ class Collision3
                 if s2
                     #s2とs1を同じ位置にセットする
                     (@@N_R-i-1).times do |j| 
-                        s2 = sha32b("#{s2}",true)
+                        s2 = sha32b("#{s2}")
                     end
                     #s2とs1が違う値ならコリジョンしたとみなしてよい
                     if s1 != s2 
-                        s1next = sha32b("#{s1}",false)
-                        s2next = sha32b("#{s2}",false)
+                        s1next = sha32b("#{s1}")
+                        s2next = sha32b("#{s2}")
                         #前の値は同じことがわかっていて,nextの値がだぶったら前の値2つがコリジョン
                         while s1next != s2next
                             s1 = s1next
                             s2 = s2next 
-                            s1next = sha32b("#{s1}",false)
-                            s2next = sha32b("#{s2}",false)
+                            s1next = sha32b("#{s1}")
+                            s2next = sha32b("#{s2}")
                         end
                         @table2[s1next] = [s1,s2]
                         #puts "ssss",s1,s2,sha32b("#{s1}"),sha32b("#{s2}"),"gggg"
