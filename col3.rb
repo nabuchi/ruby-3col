@@ -1,15 +1,25 @@
-#!/usr/bin/ruby1.9 -Ku
+#!/usr/bin/ruby -Ku
 
 require 'digest/sha1'
 
 #12bitを想定
 class Collision3
+    #@@bitは4の倍数
     @@bit = 12
     @@pow2_N = 4096
     @@pow2_23N = 256
     @@pow2_13N = 16
+=begin 
+    @@bit = 16
+    @@pow2_N = 65536
+    @@pow2_23N = 1629
+    @@pow2_13N = 40
 
-=begin
+    @@bit = 20
+    @@pow2_N =
+    @@pow2_23N =
+    @@pow2_13N = 
+
     @@bit = 32
     @@pow2_N = 4294967296
     @@pow2_23N = 2654484
@@ -19,23 +29,32 @@ class Collision3
     @@N_A = @@pow2_13N
     @@N_R = @@pow2_13N
     @@N_B = @@pow2_23N + 10000
-    @@startarr = 40-@@bit/4+1
+    @@startarr = 40-@@bit/4
 
     def initialize()
         @fortable2 = {}
         @table2 = {}
         @shacount = 0
+        @allhash = {}
     end
     attr_accessor :shacount
-private
+#private
     def sha32b(str, flag = true)
         @shacount += 1 if flag
-        return Digest::SHA1.hexdigest(str)[@@startarr..40].hex
+        return Digest::SHA1.hexdigest(str)[@@startarr..39].hex
     end
 
-public
+#public
+    def chkall
+        (1..@@pow2_N).to_a.each do |i|
+            h = sha32b("#{i}")
+            @allhash[h] = 0 if !@allhash[h]
+            @allhash[h] += 1
+        end
+    end
     #2コリジョンテーブルを作成するためにN_AxN_Rのテーブルを作成
     def makefortable2
+        ret = @shacount
         i = 0
         while @fortable2.size < @@N_A && i += 1
             start = goal = rand(@@pow2_N)
@@ -44,6 +63,7 @@ public
             end
             @fortable2[goal] = start
         end
+        @shacount - ret
     end
     #ランダムマップを用いてN_AxN_Rのテーブルを作成
     class Anchor
@@ -59,6 +79,7 @@ public
 
     #2コリジョンテーブルの作成
     def maketable2
+        ret = @shacount
         while @table2.size < @@N_A
             rand = rand(@@pow2_N) 
             s1 = g1 = rand
@@ -88,10 +109,12 @@ public
                 end
             end
         end
+        @shacount - ret
     end
 
     #2コリジョンテーブルから3コリジョンを見つける
     def search3col
+        ret = @shacount
         @@N_B.times do |i|
             s = rand(@@pow2_N)
             g = sha32b("#{s}")
@@ -100,25 +123,33 @@ public
                 if arr2[0] != s && arr2[1] != s
                     #puts "=ssss=",arr2[0],arr2[1],s,sha32b("#{arr2[0]}"),sha32b("#{arr2[1]}"),sha32b("#{s}"),"=gggg="
                     #puts "shacountは", @shacount
-                    return 0
+                    return @shacount - ret
                 end
             end
 
         end
+        @shacount - ret
+    end
+    def putcolcnt
+        print "wariai:",@colcnt.size.to_f/(@@N_A*@@N_R).to_f, "\n"
+    end
+
+    def watchall
+        chkall
+        @allhash.sort.each do |k,v|
+            print k,':',v,"\n"
+        end
+        puts
+        puts @allhash.size
+        puts
     end
 end
 
-10000.times do |p|
-col3 = Collision3.new
-sc = []
-col3.makefortable2
-sc[1] =  col3.shacount
-puts sc[1] - 0
-col3.maketable2
-sc[2] = col3.shacount
-puts sc[2] - sc[1]
-col3.search3col
-sc[3] = col3.shacount
-puts sc[3] - sc[2]
-puts col3.shacount
+1.times do |p|
+    col3 = Collision3.new
+    puts col3.makefortable2
+    puts col3.maketable2
+    puts col3.search3col
+    puts col3.shacount
+    #col3.watchall
 end
