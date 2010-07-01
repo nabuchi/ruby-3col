@@ -1,4 +1,4 @@
-#!/usr/bin/ruby -Ku
+#!/usr/bin/ruby1.9 -Ku
 
 require 'digest/sha1'
 
@@ -89,18 +89,18 @@ class Collision3
                 if s2
                     #s2とs1を同じ位置にセットする
                     (@@N_R-i-1).times do |j| 
-                        s2 = sha32b("#{s2}")
+                        s2 = sha32b("#{s2}",true)
                     end
                     #s2とs1が違う値ならコリジョンしたとみなしてよい
                     if s1 != s2 
-                        s1next = sha32b("#{s1}")
-                        s2next = sha32b("#{s2}")
+                        s1next = sha32b("#{s1}",false)
+                        s2next = sha32b("#{s2}",false)
                         #前の値は同じことがわかっていて,nextの値がだぶったら前の値2つがコリジョン
                         while s1next != s2next
                             s1 = s1next
                             s2 = s2next 
-                            s1next = sha32b("#{s1}")
-                            s2next = sha32b("#{s2}")
+                            s1next = sha32b("#{s1}",false)
+                            s2next = sha32b("#{s2}",false)
                         end
                         @table2[s1next] = [s1,s2]
                         #puts "ssss",s1,s2,sha32b("#{s1}"),sha32b("#{s2}"),"gggg"
@@ -137,7 +137,7 @@ class Collision3
     def watchall
         chkall
         @allhash.sort.each do |k,v|
-            print k,':',v,"\n"
+            #print k,':',v,"\n"
         end
         puts
         puts @allhash.size
@@ -145,7 +145,7 @@ class Collision3
     end
 end
 
-1.times do |p|
+1000.times do |p|
     col3 = Collision3.new
     puts col3.makefortable2
     puts col3.maketable2
