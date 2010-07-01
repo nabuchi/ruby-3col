@@ -5,7 +5,7 @@ step1 = File.open("step1.dat","w")
 step2 = File.open("step2.dat","w")
 step3 = File.open("step3.dat","w")
 all = File.open("all.dat","w")
-open("data.dat") {|file|
+open("data_all.dat") {|file|
     while l = file.gets
         lines += 1
         if lines%4 == 1

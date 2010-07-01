@@ -4,7 +4,7 @@ require 'digest/sha1'
 
 #12bitを想定
 class Collision3
-    @@bit = 16
+    @@bit = 12
     @@pow2_N = 4096
     @@pow2_23N = 256
     @@pow2_13N = 16
