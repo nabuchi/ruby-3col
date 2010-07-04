@@ -5,20 +5,19 @@ require 'digest/sha1'
 #12bitを想定
 class Collision3
     #@@bitは4の倍数
-=begin
+#=begin
     @@bit = 12
     @@pow2_N = 4096
     @@pow2_23N = 256
     @@pow2_13N = 16
-=end
+#=end
 =begin
-
     @@bit = 16
     @@pow2_N = 65536
     @@pow2_23N = 1625
     @@pow2_13N = 40
 =end
-
+=begin
     @@bit = 20
     @@pow2_N = 1048576
     @@pow2_23N = 10321
@@ -32,7 +31,7 @@ class Collision3
 
     @@N_A = @@pow2_13N
     @@N_R = @@pow2_13N
-    @@N_B = @@pow2_23N + 10000
+    @@N_B = @@pow2_23N
     @@startarr = 40-@@bit/4
 
     def initialize()
@@ -40,6 +39,7 @@ class Collision3
         @table2 = {}
         @shacount = 0
         @allhash = {}
+        @colcnt = {}
     end
     attr_accessor :shacount
 #private
@@ -64,6 +64,7 @@ class Collision3
             start = goal = rand(@@pow2_N)
             @@N_R.times do |j|
                 goal = sha32b("#{goal}")
+                @colcnt[goal] ? @colcnt[goal] +=1 : @colcnt[goal] = 1
             end
             @fortable2[goal] = start
         end
@@ -119,7 +120,7 @@ class Collision3
     #2コリジョンテーブルから3コリジョンを見つける
     def search3col
         ret = @shacount
-        @@N_B.times do |i|
+        (@@N_B+10000).times do |i|
             s = rand(@@pow2_N)
             g = sha32b("#{s}")
             arr2 = @table2[g]
@@ -135,13 +136,14 @@ class Collision3
         @shacount - ret
     end
     def putcolcnt
+        puts @colcnt.size
         print "wariai:",@colcnt.size.to_f/(@@N_A*@@N_R).to_f, "\n"
     end
 
     def watchall
         chkall
         @allhash.sort.each do |k,v|
-            #print k,':',v,"\n"
+            print k,':',v,"\n"
         end
         puts
         puts @allhash.size
@@ -149,11 +151,12 @@ class Collision3
     end
 end
 
-100.times do |p|
+1.times do |p|
     col3 = Collision3.new
-    puts col3.makefortable2
-    puts col3.maketable2
-    puts col3.search3col
-    puts col3.shacount
+    col3.makefortable2
+    col3.maketable2
+    col3.search3col
+    col3.shacount
+    col3.putcolcnt
     #col3.watchall
 end
