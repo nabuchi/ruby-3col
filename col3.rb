@@ -5,12 +5,10 @@ require 'digest/sha1'
 #12bitを想定
 class Collision3
     #@@bitは4の倍数
-=begin
     @@bit = 12
     @@pow2_N = 4096
     @@pow2_23N = 256
     @@pow2_13N = 16
-=end
 =begin
 
     @@bit = 16
@@ -18,11 +16,12 @@ class Collision3
     @@pow2_23N = 1625
     @@pow2_13N = 40
 =end
-
+=begin
     @@bit = 20
     @@pow2_N = 1048576
     @@pow2_23N = 10321
     @@pow2_13N = 102
+=end
 =begin
     @@bit = 32
     @@pow2_N = 4294967296
@@ -30,9 +29,12 @@ class Collision3
     @@pow2_13N = 1625
 =end
 
-    @@N_A = @@pow2_13N
-    @@N_R = @@pow2_13N
-    @@N_B = @@pow2_23N + 10000
+    #@@N_A = @@pow2_13N
+    @@N_A = 10
+    #@@N_R = @@pow2_13N
+    @@N_R = 40
+    #@@N_B = @@pow2_23N
+    @@N_B = 406
     @@startarr = 40-@@bit/4
 
     def initialize()
@@ -119,7 +121,7 @@ class Collision3
     #2コリジョンテーブルから3コリジョンを見つける
     def search3col
         ret = @shacount
-        @@N_B.times do |i|
+        (@@N_B+100000).times do |i|
             s = rand(@@pow2_N)
             g = sha32b("#{s}")
             arr2 = @table2[g]
