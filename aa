@@ -1,0 +1,28 @@
+while table2.size < N^A
+    rand = rand(1..N) 
+    s1 = g1 = rand
+    for (i = 1..N^R)
+        g1 = F(g1)#とりあえずs1を一個進める
+        s2 = g1 in table? return start
+        if s2
+            #s2とs1を同じ位置にセットする
+            for(j = 1..N^R-i)
+                s2 = F(s2)
+            end
+            #s2とs1が違う値ならコリジョンしたとみなしてよい
+            if s1 != s2
+                s1next = F(s1)
+                s2next = F(s2)
+                #前の値は同じことがわかっていて,nextの値がだぶったら前の値2つがコリジョン
+                while s1next != s2next
+                    s1 = s1next
+                    s2 = s2next 
+                    s1next = F(s1)
+                    s2next = F(s2)
+                end
+                table2.add (s1,s2,s1next)
+                break#この先g1を発生させても希望が持てないので次の乱数を作成する
+            end
+        end
+    end
+end
