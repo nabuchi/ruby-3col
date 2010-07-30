@@ -152,12 +152,12 @@ class Collision3
     end
 end
 
-100.times do |p|
+1.times do |p|
     col3 = Collision3.new
-    puts col3.makefortable2
-    puts col3.maketable2
-    puts col3.search3col
-    puts col3.shacount
-    #col3.putcolcnt
+    col3.makefortable2
+    col3.maketable2
+    col3.search3col
+    col3.shacount
+    col3.putcolcnt
     #col3.watchall
 end
