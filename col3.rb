@@ -5,24 +5,24 @@ require 'digest/sha1'
 #12bitを想定
 class Collision3
     #@@bitは4の倍数
-#=begin
+=begin
     @@bit = 12
     @@pow2_N = 4096
     @@pow2_23N = 256
     @@pow2_13N = 16
-#=end
+=end
 =begin
     @@bit = 16
     @@pow2_N = 65536
     @@pow2_23N = 1625
     @@pow2_13N = 40
 =end
-=begin
+#=begin
     @@bit = 20
     @@pow2_N = 1048576
     @@pow2_23N = 10321
     @@pow2_13N = 102
-=end
+#=end
 =begin
     @@bit = 32
     @@pow2_N = 4294967296
@@ -31,11 +31,11 @@ class Collision3
 =end
 
     #@@N_A = @@pow2_13N
-    @@N_A = 10
+    @@N_A = 64
     #@@N_R = @@pow2_13N
-    @@N_R = 40
+    @@N_R = 256
     #@@N_B = @@pow2_23N
-    @@N_B = 406
+    @@N_B = 16384
     @@startarr = 40-@@bit/4
 
     def initialize()
@@ -157,10 +157,10 @@ end
 
 1.times do |p|
     col3 = Collision3.new
-    col3.makefortable2
-    col3.maketable2
-    col3.search3col
-    col3.shacount
+    puts col3.makefortable2
+    puts col3.maketable2
+    puts col3.search3col
+    puts col3.shacount
     col3.putcolcnt
     #col3.watchall
 end
