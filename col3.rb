@@ -1,4 +1,4 @@
-#!/usr/bin/ruby1.9 -Ku
+#!/usr/bin/ruby
 
 require 'digest/sha1'
 
@@ -150,7 +150,7 @@ class Collision3
     #2コリジョンテーブルから3コリジョンを見つける
     def search3col
         ret = @shacount
-       (@@N_B+10000).times do |i|
+        (@@N_B+10000).times do |i|
             s = rand(@@pow2_N)
             g = sha32b("#{s}",true,'bb')
             arr2 = @table2[g]
@@ -187,7 +187,7 @@ end
     puts col3.maketable2
     puts col3.search3col
     puts col3.shacount
-   puts col3.shacount2
+    puts col3.shacount2
     #col3.putcolcnt
     #col3.watchall
 end
