@@ -30,7 +30,7 @@ class Collision3
     @@pow2_13N = 1625
 =end
 
-   @@N_A = @@pow2_13N
+    @@N_A = @@pow2_13N
     #@@N_A = 10
     @@N_R = @@pow2_13N
     #@@N_R = 10159
