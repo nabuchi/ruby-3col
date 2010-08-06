@@ -150,11 +150,7 @@ class Collision3
     #2コリジョンテーブルから3コリジョンを見つける
     def search3col
         ret = @shacount
-<<<<<<< HEAD:col3.rb
-        (@@N_B*@@N_B).times do |i|
-=======
-        (@@N_B+10000).times do |i|
->>>>>>> 07290582bde6c1b290b226e41628db27b6ebc70d:col3.rb
+       (@@N_B+10000).times do |i|
             s = rand(@@pow2_N)
             g = sha32b("#{s}",true,'bb')
             arr2 = @table2[g]
@@ -191,11 +187,7 @@ end
     puts col3.maketable2
     puts col3.search3col
     puts col3.shacount
-<<<<<<< HEAD:col3.rb
-    col3.putcolcnt
-=======
-    puts col3.shacount2
+   puts col3.shacount2
     #col3.putcolcnt
->>>>>>> 07290582bde6c1b290b226e41628db27b6ebc70d:col3.rb
     #col3.watchall
 end
