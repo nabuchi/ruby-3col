@@ -1,4 +1,4 @@
-#!/usr/bin/ruby1.9 -Ku
+#!/usr/bin/ruby -Ku
 
 require 'digest/sha1'
 
@@ -30,7 +30,7 @@ class Collision3
     @@pow2_13N = 1625
 =end
 
-   @@N_A = @@pow2_13N
+    @@N_A = @@pow2_13N
     #@@N_A = 10
     @@N_R = @@pow2_13N
     #@@N_R = 10159
@@ -45,7 +45,6 @@ class Collision3
         @allhash = {}
         @colcnt = {}
         @shacount2 = {}
-        @count = 0
         #@mar = Marshal.load(File.open('dump.dat'))
     end
     attr_accessor :shacount,:shacount2
@@ -77,20 +76,24 @@ class Collision3
             @allhash[h] = 0 if !@allhash[h]
             @allhash[h] += 1
         end
+        @allhash.size
     end
     #2コリジョンテーブルを作成するためにN_AxN_Rのテーブルを作成
     def makefortable2
         ret = @shacount
         i = 0
         while @fortable2.size < @@N_A && i += 1
-            start = goal = rand(@@pow2_N)
-            @@N_R.times do |j|
-                goal = sha32b("#{goal}")
-                @colcnt[goal] ? @colcnt[goal] +=1 : @colcnt[goal] = 1
+            #start = goal = rand(@@pow2_N)
+            (@@N_A*@@N_R).times do |j|
+                start = rand(@@pow2_N)    
+                goal = sha32b("#{start}")
+                @fortable2[goal] = start
+                #goal = sha32b("#{goal}")
+                #@colcnt[goal] ? @colcnt[goal] +=1 : @colcnt[goal] = 1
                 #print goal,','
             end
             #puts;puts
-            @fortable2[goal] = start
+            #@fortable2[goal] = start
         end
         @shacount - ret
     end
@@ -106,7 +109,22 @@ class Collision3
           
     end
 
+    def maketable2
+        ret = @shacount
+        while @table2.size < @@N_A
+            start = rand(@@pow2_N)
+            goal = sha32b("#{start}")
+            if start2 = @fortable2[goal]
+                if start != start2
+                   @table2[goal] = [start,start2]
+                end
+            end
+        end
+        @shacount - ret
+    end
+
     #2コリジョンテーブルの作成
+=begin
     def maketable2
         ret = @shacount
         while @table2.size < @@N_A
@@ -116,7 +134,6 @@ class Collision3
                 g1 = sha32b("#{g1}",true, 'mk1')#とりあえずs1を一個進める
                 s2 = @fortable2[g1]#tableに発見すればスタートをs2とする
                 if s2
-                    puts @count += 1
                     #s2とs1を同じ位置にセットする
                     (@@N_R-i-1).times do |j| 
                         s2 = sha32b("#{s2}",true,'set')
@@ -146,15 +163,12 @@ class Collision3
         end
         @shacount - ret
     end
+=end
 
     #2コリジョンテーブルから3コリジョンを見つける
     def search3col
         ret = @shacount
-<<<<<<< HEAD:col3.rb
-        (@@N_B*@@N_B).times do |i|
-=======
-        (@@N_B+10000).times do |i|
->>>>>>> 07290582bde6c1b290b226e41628db27b6ebc70d:col3.rb
+        (@@N_B+1000000).times do |i|
             s = rand(@@pow2_N)
             g = sha32b("#{s}",true,'bb')
             arr2 = @table2[g]
@@ -190,12 +204,8 @@ end
     puts col3.makefortable2
     puts col3.maketable2
     puts col3.search3col
-    puts col3.shacount
-<<<<<<< HEAD:col3.rb
-    col3.putcolcnt
-=======
-    puts col3.shacount2
+    #puts col3.shacount
+    #puts col3.shacount2
     #col3.putcolcnt
->>>>>>> 07290582bde6c1b290b226e41628db27b6ebc70d:col3.rb
     #col3.watchall
 end
